@@ -76,6 +76,9 @@ module Solutions=
     let ListLenght4 (list:List<'T>) : int =
         list |> List.sumBy (fun x -> 1)
 
+    let ListLenght5 (list:List<'T>) : int =
+        list |> List.fold (fun cnt x -> cnt+1) 0
+
     let ListRev1 (list:List<'T>) : List<'T> =
         list |> List.rev
 
@@ -86,14 +89,14 @@ module Solutions=
             | head :: tail -> LRev tail (head::accum)
         LRev list []
 
-    let rec ListRev3 (xs:List<'T>) : List<'T> =
+    let rec ListRev3 (list:List<'T>) : List<'T> =
         let rec rev acc = function
         | [] -> acc
         | x :: xs -> rev (x::acc) xs
-        rev [] xs
+        rev [] list
 
-    let rec ListRev4 xs  =
-        List.fold(fun acc x -> x::acc) [] xs
+    let rec ListRev4 (xs:List<'T>) : List<'T>  =
+        List.fold(fun (acc:List<'T>) (x:'T) -> x::acc) [] xs
     
     let rec IsListPalindrome (list:List<'T>):bool  =
         list = List.rev list

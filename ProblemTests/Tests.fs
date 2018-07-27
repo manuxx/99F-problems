@@ -95,6 +95,12 @@ module Tests =
         let list = ["abc"; "def"; "xxx"; "yyy"; "zzz"]
         let len = Solutions.ListLenght4 list
         len |> should equal list.Length
+    
+    [<Fact>]
+    let ``Solution 4 fold`` () =
+        let list = ["abc"; "def"; "xxx"; "yyy"; "zzz"]
+        let len = Solutions.ListLenght4 list
+        len |> should equal list.Length
 
     [<Fact>]
     let ``Solution 5 rev`` () =
