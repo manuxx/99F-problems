@@ -121,6 +121,12 @@ module Tests =
         len |> should equal ["xxx"; "def"; "abc"]
 
     [<Fact>]
+    let ``Solution 5 rec alternative function syntax`` () =
+        let list = ["abc"; "def"; "xxx"]
+        let len = Solutions.ListRev3a list
+        len |> should equal ["xxx"; "def"; "abc"]
+
+    [<Fact>]
     let ``Solution 5 fold`` () =
         let list = ["abc"; "def"; "xxx"]
         let len = Solutions.ListRev4 list
@@ -131,3 +137,115 @@ module Tests =
         let list = ["a"; "b"; "a"]
         let isPalindrome = Solutions.IsListPalindrome list
         isPalindrome |> should be True
+
+    [<Fact>]
+    let ``Solution 7 rec`` () =
+        let input = Solutions.List [ Solutions.Elem 1; Solutions.List [Solutions.Elem 2; Solutions.List [Solutions.Elem 3; Solutions.Elem 4]; Solutions.Elem 5]]
+        let expected = [1;2;3;4;5]
+        let result = Solutions.FlattenList1 input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 7 collect`` () =
+        let input = Solutions.List [ Solutions.Elem 1; Solutions.List [Solutions.Elem 2; Solutions.List [Solutions.Elem 3; Solutions.Elem 4]; Solutions.Elem 5]]
+        let expected = [1;2;3;4;5]
+        let result = Solutions.FlattenList2 input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 7 collect with twist`` () =
+        let input = Solutions.List [ Solutions.Elem 1; Solutions.List [Solutions.Elem 2; Solutions.List [Solutions.Elem 3; Solutions.Elem 4]; Solutions.Elem 5]]
+        let expected = [1;2;3;4;5]
+        let result = Solutions.FlattenList2b input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 7 fold`` () =
+        let input = Solutions.List [ Solutions.Elem 1; Solutions.List [Solutions.Elem 2; Solutions.List [Solutions.Elem 3; Solutions.Elem 4]; Solutions.Elem 5]]
+        let expected = [1;2;3;4;5]
+        let result = Solutions.FlattenList3 input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 7 fold with twist`` () =
+        let input = Solutions.List [ Solutions.Elem 1; Solutions.List [Solutions.Elem 2; Solutions.List [Solutions.Elem 3; Solutions.Elem 4]; Solutions.Elem 5]]
+        let expected = [1;2;3;4;5]
+        let result = Solutions.FlattenList3b input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 8 recursive`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [1;2;3;2;3;2;5]
+        let result = Solutions.RemoveConsecutiveDuplicates1 input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 8 fold`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [1;2;3;2;3;2;5]
+        let result = Solutions.RemoveConsecutiveDuplicates2 input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 8 fold improved`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [1;2;3;2;3;2;5]
+        let result = Solutions.RemoveConsecutiveDuplicates2b input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 8 foldBack`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [1;2;3;2;3;2;5]
+        let result = Solutions.RemoveConsecutiveDuplicates3 input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 9`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [[1];[2];[3;3];[2];[3];[2;2;2];[5;5]]
+        let result = Solutions.PackConsecutiveDuplicates1 input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 9 alt`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [[1];[2];[3;3];[2];[3];[2;2;2];[5;5]]
+        let result = Solutions.PackConsecutiveDuplicates1a input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 9 alt''`` () =
+        let input = [1; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [[1];[2];[3;3];[2];[3];[2;2;2];[5;5]]
+        let result = Solutions.PackConsecutiveDuplicates1a input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 10 map`` () =
+        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [(1, 1);(3, 2);(2, 3); (1, 2); (1, 3); (3, 2); (2, 5)]
+        let result = Solutions.RunLenghtEncoding1 input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 10 alt`` () =
+        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [(1, 1);(3, 2);(2, 3); (1, 2); (1, 3); (3, 2); (2, 5)]
+        let result = Solutions.RunLenghtEncoding2 input
+        result |> should equal expected
+
+    [<Fact>]
+    let ``Solution 10 foldback`` () =
+        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [(1, 1);(3, 2);(2, 3); (1, 2); (1, 3); (3, 2); (2, 5)]
+        let result = Solutions.RunLenghtEncoding3smpl input
+        result |> should equal expected
+    
+    [<Fact>]
+    let ``Solution 10 foldback fancy`` () =
+        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        let expected = [(1, 1);(3, 2);(2, 3); (1, 2); (1, 3); (3, 2); (2, 5)]
+        let result = Solutions.RunLenghtEncoding3fancy input
+        result |> should equal expected
