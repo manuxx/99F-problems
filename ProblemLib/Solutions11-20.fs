@@ -89,6 +89,5 @@ module Solutions11=
         |> List.rev 
 
     let DuplicateListFoldBack (input: 'a list) : 'a list =
-        input
-        |> List.foldBack (fun elem acc -> elem::elem::acc) [] 
+        List.foldBack (fun elem acc -> elem::elem::acc) input [] 
         

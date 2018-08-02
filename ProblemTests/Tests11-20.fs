@@ -6,58 +6,58 @@ open FsUnit.Xunit
 
 module Tests11 =
 
-    [<Fact>]
-    let ``Solution 11 RLE modified encoding`` () =
+    let checkRLEEncodingCases fun4Test =
         let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
         let expected = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let result = Solutions11.RunLenghtEncodingMod input
-        result |> should equal expected
+        fun4Test input |> should equal expected
+
+    [<Fact>]
+    let ``Solution 11 RLE modified encoding`` () =
+        checkRLEEncodingCases Solutions11.RunLenghtEncodingMod 
+
+    let checkRLEDecodingCases fun4Test =
+        let input = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
+        let expected = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
+        fun4Test input |> should equal expected
 
     [<Fact>]
     let ``Solution 12 RLE decoding`` () =
-        let input = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let expected = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
-        let result = Solutions11.RunLenghtDecode input
-        result |> should equal expected
+        checkRLEDecodingCases Solutions11.RunLenghtDecode
 
     [<Fact>]
     let ``Solution 12 RLE decoding alt`` () =
-        let input = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let expected = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
-        let result = Solutions11.RunLenghtDecodeAlt input
-        result |> should equal expected
+        checkRLEDecodingCases Solutions11.RunLenghtDecodeAlt 
 
     [<Fact>]
     let ``Solution 13 Direct RLE encoding`` () =
-        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
-        let expected = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let result = Solutions11.RunLenghtEncodingDirect input
-        result |> should equal expected
+        checkRLEEncodingCases Solutions11.RunLenghtEncodingDirect 
     
     [<Fact>]
     let ``Solution 13 Direct RLE encoding Alt`` () =
-        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
-        let expected = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let result = Solutions11.RunLenghtEncodingDirectAlt input
-        result |> should equal expected
+        checkRLEEncodingCases Solutions11.RunLenghtEncodingDirectAlt 
     
     [<Fact>]
     let ``Solution 13 Direct RLE encoding FoldBack`` () =
-        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
-        let expected = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let result = Solutions11.RunLenghtEncodingDirectFoldBack input
-        result |> should equal expected
+        checkRLEEncodingCases Solutions11.RunLenghtEncodingDirectFoldBack 
     
     [<Fact>]
     let ``Solution 13 Direct RLE encoding FoldBackAltFun`` () =
-        let input = [1; 2; 2; 2; 3; 3; 2; 3; 2; 2; 2; 5; 5]
-        let expected = [Solutions11.Single 1; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 3); Solutions11.Single 2; Solutions11.Single 3; Solutions11.Multiple (3, 2); Solutions11.Multiple (2, 5)]
-        let result = Solutions11.RunLenghtEncodingDirectFoldBackAltFun input
-        result |> should equal expected
+        checkRLEEncodingCases Solutions11.RunLenghtEncodingDirectFoldBackAltFun 
+
+    let checkDuplicatingListCases fun4test =
+        let input = [1; 2; 2; 3; 4; 4; 4]
+        let expected = [1;1;2;2;2;2;3;3;4;4;4;4;4;4]
+        fun4test input |> should equal expected
 
     [<Fact>]
     let ``Solution 14 Duplicate`` () =
-        let input = [1; 2; 2; 3; 4; 4; 4]
-        let expected = [1;1;2;2;2;2;3;3;4;4;4;4;4;4]
-        let result = Solutions11.DuplicateList input
-        result |> should equal expected
+        checkDuplicatingListCases Solutions11.DuplicateList
+    
+    [<Fact>]
+    let ``Solution 14 Duplicate Fold`` () =
+        checkDuplicatingListCases Solutions11.DuplicateListFold
+    
+    [<Fact>]
+    let ``Solution 14 Duplicate Fold Back`` () =
+        checkDuplicatingListCases Solutions11.DuplicateListFoldBack
+    
