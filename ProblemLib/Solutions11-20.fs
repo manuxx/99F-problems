@@ -220,3 +220,47 @@ module Solutions11=
     let SliceListYieldAlt(input:'a list) from_i to_i   =
         [ for (i,e) in Seq.zip [ 1 .. to_i] input do if (i)>=from_i then yield e ]
     
+    let LeftRotateList (input:'a list) k : 'a list   =
+        let rec take acc i inp=
+            match inp with 
+            | [] -> List.rev acc
+            | _::_ when i<1 -> List.rev acc
+            | h::tail -> take (h::acc) (i-1) tail 
+        let rec drop i inp =
+            match i,inp with 
+            | _,[] -> []
+            | 0,_::_ -> inp
+            | i,_::tail -> drop (i-1) tail 
+        let k = k % (input.Length)
+        (drop k input) @ (take [] k input)
+    
+    let rec LeftRotateListRec (input:'a list) k : 'a list   =
+        match input,k with
+        | _,0 -> input
+        | [],_ -> []
+        | h :: tail,k -> LeftRotateListRec (tail @ [h]) (k-1)
+    
+    let rec LeftRotateListSplit (input:'a list) k : 'a list   =
+        let at = let ln = List.length input in abs <| (ln + k) % ln
+        let st,nd = SplitList input at
+        nd @ st
+
+    let RemoveKthFromList (input:'a list) k : 'a list   =
+        let rec take acc i inp=
+            match inp with 
+            | [] -> List.rev acc
+            | _::_ when i<1 -> List.rev acc
+            | h::tail -> take (h::acc) (i-1) tail 
+        let rec drop i inp =
+            match i,inp with 
+            | _,[] -> []
+            | 0,_::_ -> inp
+            | i,_::tail -> drop (i-1) tail 
+        (take [] (k-1) input) @ (drop k input)
+
+    let rec RemoveKthFromListSplit (input:'a list) k : 'a list   =
+        if k>List.length input then
+            input
+        else
+            let st,nd = SplitList input (k-1)
+            st @ List.tail nd

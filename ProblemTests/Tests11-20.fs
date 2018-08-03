@@ -176,3 +176,37 @@ module Tests11 =
     let ``Solution 18 Slice Yield Alt`` () =
         checkSliceListCases Solutions11.SliceListYieldAlt
         
+    let checkRotateListCases fun4test =
+        let input = [1..10]
+        fun4test input 3 |> should equal ([4..10] @ [1..3])
+        fun4test input 0 |> should equal [1..10]
+        fun4test input 10 |> should equal [1..10]
+        fun4test input 15 |> should equal ([6..10] @ [1..5])
+        
+    [<Fact>]
+    let ``Solution 19 Rotate`` () =
+        checkRotateListCases Solutions11.LeftRotateList
+    
+    [<Fact>]
+    let ``Solution 19 Rotate Rec`` () =
+        checkRotateListCases Solutions11.LeftRotateListRec
+
+    [<Fact>]
+    let ``Solution 19 Rotate Split`` () =
+        checkRotateListCases Solutions11.LeftRotateListSplit
+    
+    let checkRemoveKthFromListCases fun4test =
+        let input = [1..10]
+        fun4test input 3 |> should equal ([1..2] @ [4..10])
+        fun4test input 11 |> should equal [1..10]
+        fun4test input 1 |> should equal [2..10]
+        fun4test input 10 |> should equal [1..9]
+        
+        
+    [<Fact>]
+    let ``Solution 20 Remove kth`` () =
+        checkRemoveKthFromListCases Solutions11.RemoveKthFromList
+
+    [<Fact>]
+    let ``Solution 20 Remove kth Split`` () =
+        checkRemoveKthFromListCases Solutions11.RemoveKthFromListSplit
