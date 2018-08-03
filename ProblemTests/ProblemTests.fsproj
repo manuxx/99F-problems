@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Include="Tests01-10.fs" />
     <Compile Include="Tests11-20.fs" />
+    <Compile Include="Tests21-30.fs" />
   </ItemGroup>
 
   <ItemGroup>
