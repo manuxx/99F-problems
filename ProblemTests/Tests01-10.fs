@@ -69,6 +69,7 @@ module Tests =
         checkKthListElementCases Solutions.KthListElement3 
 
     let checkListLengthCases fun4test =
+        fun4test [] |> should equal 0
         let list = ["abc"; "def"; "xxx"; "yyy"; "zzz"]
         fun4test list |> should equal list.Length
 
@@ -93,6 +94,9 @@ module Tests =
         checkListLengthCases  Solutions.ListLenght4 
 
     let checkListReverseCases fun4test =
+        fun4test [] |> should be Empty
+        fun4test ["abc"] |> should equal ["abc"]
+        
         let list = ["abc"; "def"; "xxx"]
         fun4test list |> should equal ["xxx"; "def"; "abc"]
 
@@ -123,6 +127,18 @@ module Tests =
         isPalindrome |> should be True
 
     let checkFlattenListCases fun4test =
+        let input = Solutions.List []
+        let result = fun4test input
+        result |> should be Empty
+
+        let input = Solutions.List [Solutions.List[]; Solutions.List []]
+        let result = fun4test input
+        result |> should be Empty
+
+        let input = Solutions.List [Solutions.List[Solutions.List []] ]
+        let result = fun4test input
+        result |> should be Empty
+
         let input = Solutions.List [ Solutions.Elem 1; Solutions.List [Solutions.Elem 2; Solutions.List [Solutions.Elem 3; Solutions.Elem 4]; Solutions.Elem 5]]
         let expected = [1;2;3;4;5]
         let result = fun4test input
