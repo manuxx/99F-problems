@@ -208,7 +208,7 @@ module Solutions=
         
     let RunLenghtEncoding1 (input:'a list) : (int * 'a) list =
         let nestedList = PackConsecutiveDuplicates1 input
-        nestedList |> List.map (fun l -> (l.Length, l.Head) )
+        nestedList |> List.map (fun l -> (List.length l, l.Head) )
 
     
     let RunLenghtEncoding2 (input:'a list) : (int * 'a) list =

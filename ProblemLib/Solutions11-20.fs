@@ -9,7 +9,7 @@ module Solutions11=
         input
         |> Solutions.PackConsecutiveDuplicates1
         |> List.map (fun nestedList -> 
-                        if nestedList.Length = 1 then 
+                        if List.length nestedList = 1 then 
                             Single (List.head nestedList)
                         else
                             Multiple (List.length nestedList, List.head nestedList)
@@ -133,7 +133,7 @@ module Solutions11=
         |> List.rev
 
     let DropEveryNthElementZipFilter (input:'a list) n: 'a list =
-        List.zip input [1..input.Length] 
+        List.zip input [1 .. List.length input] 
         |> List.filter (fun (elem,i)-> i % n<>0)
         |> List.map fst
     
@@ -197,7 +197,7 @@ module Solutions11=
     
     let SliceListZipFilter (input:'a list) from_i to_i  : 'a list =
         input 
-        |> List.zip [1..input.Length]
+        |> List.zip [1..List.length input]
         |> List.filter (fun (i,_) -> from_i<=i && i<=to_i)
         |> List.map snd
 
@@ -231,7 +231,7 @@ module Solutions11=
             | _,[] -> []
             | 0,_::_ -> inp
             | i,_::tail -> drop (i-1) tail 
-        let k = k % (input.Length)
+        let k = k % (List.length input)
         (drop k input) @ (take [] k input)
     
     let rec LeftRotateListRec (input:'a list) k : 'a list   =
