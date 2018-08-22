@@ -8,6 +8,7 @@
     <Compile Include="Solutions01-10.fs" />
     <Compile Include="Solutions11-20.fs" />
     <Compile Include="Solutions21-30.fs" />
+    <Compile Include="SpeedTests.fs" />
   </ItemGroup>
 
   <ItemGroup>

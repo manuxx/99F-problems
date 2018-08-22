@@ -51,25 +51,26 @@ module Solutions21=
         NTimePickRandom input (List.length input)
         |> List.ofSeq
 
-    let GenCombinations (input: 'a list) (n:int) : 'a list list  =
-        let rec genWork (prefix:'a list) (remaining:'a list) (k:int) : 'a list list =
-            match remaining,k with 
-                |[],0 -> [List.rev prefix]
-                |[],_ -> []
-                |h::tail, _ -> (genWork (h::prefix) tail (k-1)) @ (genWork prefix tail k)
+    let GenCombinations input n : 'a list list  =
+        let rec genWork curSubSel remainingElements k =
+            match remainingElements,k with 
+                |_, 0 -> [List.rev curSubSel]
+                |[], _ -> []
+                |h::tail, _ -> (genWork (h::curSubSel) tail (k-1)) @ (genWork curSubSel tail k)
         genWork [] input n
 
-    let rec GenCombinationsYield (input: 'a list) (subsetLen:int) : 'a list list  =
+    let rec GenCombinationsYield input subsetLen : 'a list list  =
         match input,subsetLen with
         | [],_ -> [[]]
         | xs,1 -> [for e in xs do yield [e]]
         | x::xs,n -> [  for ys in GenCombinationsYield xs (n-1) do 
                            yield x::ys
-                        if List.length xs >n then 
-                           yield! GenCombinationsYield xs n
-                        else
+                        if List.length xs = n then 
                            yield xs 
+                        else
+                           yield! GenCombinationsYield xs n
                      ]
+
     let rec GenCombinationsYieldAlt subsetLen input  =
         let rec tails = function
             | [] -> [[]]
@@ -82,3 +83,66 @@ module Solutions21=
                         | [] -> ()
                         | t::ts-> for xs' in GenCombinationsYieldAlt (n-1) ts do
                                       yield t::xs']
+
+
+    
+    let rec GenDisjointSets subsetCounts input : 'a list list list =
+        let difference (left:list< 'a >) (right:list< 'a >) =
+            let cache = System.Collections.Generic.HashSet< 'a >(right, HashIdentity.Structural)
+            left |> List.filter (fun n -> not (cache.Contains n))
+        
+        match subsetCounts with
+        | [] -> []
+        | [c] -> [
+                    for ret in GenCombinations input c do
+                        yield [ret]
+                 ]
+        | c::cs -> [
+                    for group in GenCombinations input c do
+                        let unused = difference input group
+                        for rest in GenDisjointSets cs unused do
+                            yield group::rest
+                  ]
+
+    let rec GenDisjointSetsNoDiff subsetCounts input : 'a list list list =
+        let rec combinations partialResult skipped input n=
+            match input,n with
+                |input, 0 -> [(partialResult,input @ skipped)]
+                |[], _ -> []
+                |x::xs, n -> 
+                    let p1 = combinations (x :: partialResult) skipped xs (n-1)
+                    let p2 = combinations partialResult (x::skipped) xs n
+                    p1 @ p2
+        match subsetCounts with
+        (* this ie an equvalen but a bit slower and redundant
+        | [] -> []
+        | [c] -> [
+                    for ret, _ in combinations [] [] input c do
+                        yield [ret]
+                 ]
+         *)
+        | [] -> [[]]
+        | c::cs -> [
+                    for group, unused in combinations [] [] input c do
+                        for rest in GenDisjointSetsNoDiff cs unused do
+                            yield group::rest
+                  ]
+
+    let rec GenDisjointSetsNoDiff1 ns xs : 'a list list list =
+        let rec combinations xs n =
+            match xs, n with
+                |xs, 0 -> [([],xs)]
+                |[], _ -> []
+                |x::xs, n -> 
+                    let ts = [ for ys, zs in combinations xs (n-1) do yield (x::ys, zs)]
+                    let ds = [ for ys, zs in combinations xs n do yield (ys, x::zs)]
+                    ts @ ds
+        match ns, xs with
+        | [], _ -> [[]]
+        | n::ns,xs -> [
+                        for g,rs in combinations xs n do
+                            for gs in GenDisjointSetsNoDiff1 ns rs do 
+                                yield g::gs
+                    ]
+
+    

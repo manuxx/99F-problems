@@ -78,12 +78,15 @@ module Tests21 =
         for x in numbers do
             x |> should be (greaterThan 0)
             x |> should be (lessThanOrEqualTo 10)
-     
+    
+    let factorial n = [1..n] |> List.reduce (*)
+    let newton n k = 
+        if k = n then 1 else (factorial n) / (factorial k) /(factorial (n-k))
+
     [<Fact>]
     let ``Solution 26 rec`` () =
-        let factorial n = [1..n] |> List.reduce (*)
         let combinations  = Solutions21.GenCombinations [1..10] 3
-        let expectedCount =  (factorial 10) / (factorial 3) /(factorial (10-3))
+        let expectedCount =  newton 10 3
         List.length combinations |> should equal expectedCount
         
         for c in combinations do
@@ -95,9 +98,8 @@ module Tests21 =
     
     [<Fact>]
     let ``Solution 26 yield`` () =
-        let factorial n = [1..n] |> List.reduce (*)
         let combinations  = Solutions21.GenCombinationsYield [1..10] 3
-        let expectedCount =  (factorial 10) / (factorial 3) /(factorial (10-3))
+        let expectedCount =  newton 10 3
         List.length combinations |> should equal expectedCount
         
         for c in combinations do
@@ -109,9 +111,8 @@ module Tests21 =
     
     [<Fact>]
     let ``Solution 26 yield alt`` () =
-        let factorial n = [1..n] |> List.reduce (*)
         let combinations  = Solutions21.GenCombinationsYieldAlt 3 [1..10]
-        let expectedCount =  (factorial 10) / (factorial 3) /(factorial (10-3))
+        let expectedCount =  newton 10 3
         List.length combinations |> should equal expectedCount
         
         for c in combinations do
@@ -120,4 +121,38 @@ module Tests21 =
             for x in c do
                 x |> should be (greaterThan 0)
                 x |> should be (lessThanOrEqualTo 10)
+    
+    open NHamcrest.Core
+    let containSameElements x = CustomMatcher<'a list>(sprintf "Equals %A" x, fun (y:'a list) -> 
+                                        List.sort y = List.sort x)
+    let lengths input =
+        List.map (fun x -> List.length x) input 
+
+    [<Fact>]
+    let ``Solution solTest `` () =
+        lengths [[1;2;3];[1];[2;3]] |> should equal [3;1;2]
+    
+    let rec subSetsCalc n requiredSets =
+        match  requiredSets with 
+        | [] -> 1
+        | h::t -> (newton n h ) * (subSetsCalc (n-h) t)
+        
+    [<Fact>]
+    let ``Solution 27 `` () =
+        let input = [1..5]
+        let requiredSets = [1;1]
+
+        let result  = Solutions21.GenDisjointSets requiredSets input
+        let expectedCount =  subSetsCalc (List.length input) requiredSets
+        let totalLetsLen = List.sum requiredSets
+
+        List.length result |> should equal expectedCount
+                    
+        for set in result do
+            List.length set |> should equal (List.length requiredSets)
+            lengths set |> should equal requiredSets
+                
+            let concateneded = List.concat set
+            List.length concateneded |> should equal totalLetsLen
+            concateneded |> should be unique
     
