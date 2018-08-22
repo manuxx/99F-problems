@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Solutions31-41.fs" />
     <Compile Include="Solutions01-10.fs" />
     <Compile Include="Solutions11-20.fs" />
     <Compile Include="Solutions21-30.fs" />
