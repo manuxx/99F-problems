@@ -51,7 +51,7 @@ module Solutions21=
         NTimePickRandom input (List.length input)
         |> List.ofSeq
 
-    let GenCombinations input n : 'a list list  =
+    let GenCombinations input n   =
         let rec genWork curSubSel remainingElements k =
             match remainingElements,k with 
                 |_, 0 -> [List.rev curSubSel]
@@ -59,7 +59,7 @@ module Solutions21=
                 |h::tail, _ -> (genWork (h::curSubSel) tail (k-1)) @ (genWork curSubSel tail k)
         genWork [] input n
 
-    let rec GenCombinationsYield input subsetLen : 'a list list  =
+    let rec GenCombinationsYield input subsetLen  =
         match input,subsetLen with
         | [],_ -> [[]]
         | xs,1 -> [for e in xs do yield [e]]
@@ -71,7 +71,7 @@ module Solutions21=
                            yield! GenCombinationsYield xs n
                      ]
 
-    let rec GenCombinationsYieldAlt subsetLen input  =
+    let rec GenCombinationsYieldAlt input subsetLen  =
         let rec tails = function
             | [] -> [[]]
             | _::ys as xs -> xs::tails ys
@@ -81,7 +81,7 @@ module Solutions21=
                 [for tail in tails xs do
                     match tail with
                         | [] -> ()
-                        | t::ts-> for xs' in GenCombinationsYieldAlt (n-1) ts do
+                        | t::ts-> for xs' in GenCombinationsYieldAlt ts (n-1) do
                                       yield t::xs']
 
 
@@ -145,4 +145,22 @@ module Solutions21=
                                 yield g::gs
                     ]
 
+    let SortByLen input  =
+        List.sortBy (fun elem -> Seq.length elem) input
     
+    let SortByLenFreq input  =
+        let freqs = 
+            input 
+            |> Seq.groupBy (fun x -> Seq.length x)
+            |> Map.ofSeq
+            |> Map.map (fun k v -> Seq.length v)
+        
+        List.sortBy (fun elem -> Map.find (Seq.length elem) freqs) input
+    
+    let SortByLenFreqAlt input  =
+        input 
+        |> Seq.groupBy Seq.length
+        |> Seq.sortBy ( snd>>Seq.length ) 
+        |> Seq.collect snd 
+        |> List.ofSeq
+        

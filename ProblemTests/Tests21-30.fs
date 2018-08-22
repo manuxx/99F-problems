@@ -56,10 +56,9 @@ module Tests21 =
         for x in numbers do
             x |> should be (greaterThan 0)
             x |> should be (lessThanOrEqualTo 49)
-        
-    [<Fact>]
-    let ``Solution 25`` () =
-        let numbers  = Solutions21.Permutate [1..10]
+
+    let checkPermutateCases fun4test = 
+        let numbers  = fun4test [1..10]
         List.length numbers |> should equal 10
         
         //what about repetitions?
@@ -67,38 +66,20 @@ module Tests21 =
         for x in numbers do
             x |> should be (greaterThan 0)
             x |> should be (lessThanOrEqualTo 10)
+    
+    [<Fact>]
+    let ``Solution 25`` () =
+        checkPermutateCases Solutions21.Permutate 
      
     [<Fact>]
     let ``Solution 25 with 23Pick`` () =
-        let numbers  = Solutions21.PermutateWithPick [1..10]
-        List.length numbers |> should equal 10
-        
-        //what about repetitions?
-        numbers |> should be unique
-        for x in numbers do
-            x |> should be (greaterThan 0)
-            x |> should be (lessThanOrEqualTo 10)
+        checkPermutateCases Solutions21.PermutateWithPick 
     
     let factorial n = [1..n] |> List.reduce (*)
-    let newton n k = 
-        if k = n then 1 else (factorial n) / (factorial k) /(factorial (n-k))
+    let newton n k = if k = n then 1 else (factorial n) / (factorial k) /(factorial (n-k))
 
-    [<Fact>]
-    let ``Solution 26 rec`` () =
-        let combinations  = Solutions21.GenCombinations [1..10] 3
-        let expectedCount =  newton 10 3
-        List.length combinations |> should equal expectedCount
-        
-        for c in combinations do
-            c |> should be unique
-            c.Length |> should equal 3
-            for x in c do
-                x |> should be (greaterThan 0)
-                x |> should be (lessThanOrEqualTo 10)
-    
-    [<Fact>]
-    let ``Solution 26 yield`` () =
-        let combinations  = Solutions21.GenCombinationsYield [1..10] 3
+    let checkCombinationCases fun4test = 
+        let combinations  = fun4test [1..10] 3
         let expectedCount =  newton 10 3
         List.length combinations |> should equal expectedCount
         
@@ -108,19 +89,18 @@ module Tests21 =
             for x in c do
                 x |> should be (greaterThan 0)
                 x |> should be (lessThanOrEqualTo 10)
+    
+    [<Fact>]
+    let ``Solution 26 rec`` () =
+        checkCombinationCases Solutions21.GenCombinations 
+
+    [<Fact>]
+    let ``Solution 26 yield`` () =
+        checkCombinationCases Solutions21.GenCombinationsYield 
     
     [<Fact>]
     let ``Solution 26 yield alt`` () =
-        let combinations  = Solutions21.GenCombinationsYieldAlt 3 [1..10]
-        let expectedCount =  newton 10 3
-        List.length combinations |> should equal expectedCount
-        
-        for c in combinations do
-            c |> should be unique
-            List.length c |> should equal 3
-            for x in c do
-                x |> should be (greaterThan 0)
-                x |> should be (lessThanOrEqualTo 10)
+        checkCombinationCases Solutions21.GenCombinationsYieldAlt 
     
     open NHamcrest.Core
     let containSameElements x = CustomMatcher<'a list>(sprintf "Equals %A" x, fun (y:'a list) -> 
@@ -129,20 +109,19 @@ module Tests21 =
         List.map (fun x -> List.length x) input 
 
     [<Fact>]
-    let ``Solution solTest `` () =
+    let ``lengts toolkit should return lenghts of sublists`` () =
         lengths [[1;2;3];[1];[2;3]] |> should equal [3;1;2]
     
     let rec subSetsCalc n requiredSets =
         match  requiredSets with 
         | [] -> 1
         | h::t -> (newton n h ) * (subSetsCalc (n-h) t)
-        
-    [<Fact>]
-    let ``Solution 27 `` () =
+    
+    let checkGenDisjointSetsCases fun4test = 
         let input = [1..5]
         let requiredSets = [1;1]
 
-        let result  = Solutions21.GenDisjointSets requiredSets input
+        let result  = fun4test requiredSets input
         let expectedCount =  subSetsCalc (List.length input) requiredSets
         let totalLetsLen = List.sum requiredSets
 
@@ -156,3 +135,34 @@ module Tests21 =
             List.length concateneded |> should equal totalLetsLen
             concateneded |> should be unique
     
+    
+    [<Fact>]
+    let ``Solution 27 `` () =
+        checkGenDisjointSetsCases Solutions21.GenDisjointSets 
+
+    [<Fact>]
+    let ``Solution 27 not diff `` () =
+        checkGenDisjointSetsCases Solutions21.GenDisjointSetsNoDiff 
+
+    [<Fact>]
+    let ``Solution 27 not diff - alt version`` () =
+        checkGenDisjointSetsCases Solutions21.GenDisjointSetsNoDiff1
+
+    [<Fact>]
+    let ``Solution 28a`` () =
+        let input = ["abc";"de";"fgh";"de";"ijkl";"mn";"o"]
+        let result  = Solutions21.SortByLen input
+        result |> should equal ["o"; "de"; "de"; "mn"; "abc"; "fgh"; "ijkl"]
+
+    [<Fact>]
+    let ``Solution 28b`` () =
+        let input = ["abc";"de";"fgh";"de";"ijkl";"mn";"o"]
+        let result  = Solutions21.SortByLenFreq input
+        result |> should equal ["ijkl"; "o"; "abc"; "fgh"; "de"; "de"; "mn"]
+
+    [<Fact>]
+    let ``Solution 28b alt`` () =
+        let input = ["abc";"de";"fgh";"de";"ijkl";"mn";"o"]
+        let result  = Solutions21.SortByLenFreqAlt input
+        result |> should equal ["ijkl"; "o"; "abc"; "fgh"; "de"; "de"; "mn"]
+        
