@@ -1,13 +1,13 @@
 ﻿namespace Problems_solutions
 
 module Solutions42 =
-    let and' a b = a && b
-    let or' a b = a || b
-    let nand a b = not (a && b)
-    let nor a b = not (a || b)
-    let xor a b = a && not b || not a && b
-    let equ a b = not (xor a b)
-    let impl a b = not (a && not b)
+    let and' = (&&)
+    let or' = (||)
+    let nand a b = not <| and' a b
+    let nor a b = not <| or' a b
+    let xor a b = a <> b
+    let equ a b = a=b
+    let impl a b = compare a b |> (<>) 1
 
     let table predicate2 = 
         let pow2 = float>>(( **) 2.0)>> int
