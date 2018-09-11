@@ -15,4 +15,13 @@ module Tests42 =
         Solutions42.table Solutions42.equ |> should equal [[true; true; true]; [true; false; false]; [false; true; false]; [false; false; true]]
         Solutions42.table Solutions42.impl|> should equal [[true; true; true]; [true; false; false]; [false; true; true]; [false; false; true]]
         
+    let ``Solution 47 rec`` =
+        Solutions42.table (&&) |> should equal [[true; true; true]; [true; false; false]; [false; true; false]; [false; false; false]]
+        Solutions42.table (||) |> should equal [[true; true; true]; [true; false; true]; [false; true; true]; [false; false; false]]
+        Solutions42.table Solutions42.(&|) |> should equal [[true; true; false]; [true; false; true]; [false; true; true]; [false; false; false]]
+        Solutions42.table Solutions42.(^&&) |> should equal [[true; true; false]; [true; false; true]; [false; true; true]; [false; false; true]]
+        Solutions42.table Solutions42.(^||) |> should equal [[true; true; false]; [true; false; false]; [false; true; false]; [false; false; true]]
+        Solutions42.table (=) |> should equal [[true; true; true]; [true; false; false]; [false; true; false]; [false; false; true]]
+        Solutions42.table Solutions42.(|->)|> should equal [[true; true; true]; [true; false; false]; [false; true; true]; [false; false; true]]
+        
         
