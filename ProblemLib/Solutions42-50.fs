@@ -71,8 +71,7 @@ module Solutions42 =
 
     let tablengen n expr generator =
         let values = generator n 
-        let toString bs = System.String.Join(" ",Array.ofList(bs |> List.map string))
-        values |> Seq.iter(fun bs-> printf "%s %b\n" (bs |> toString) (expr bs))
+        values |> List.map (fun bs-> bs @ [expr bs] )
 
     let tablen n expr =
         tablengen n expr (fun n -> replicate n [true; false])
