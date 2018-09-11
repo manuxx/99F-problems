@@ -31,10 +31,10 @@ module Solutions42 =
 
     let rec genBoolTable1 digits =
         if digits<=0 then [];
-        else if digits=1 then [[false];[true]]
+        else if digits=1 then [[true];[false]]
         else
             let ret = genBoolTable1 (digits-1)
-            [for s in ret do yield false::s; yield true::s]
+            [for s in ret do yield true::s; yield false::s]
 
 
     let rec genBoolGrayTable digits =
@@ -59,17 +59,22 @@ module Solutions42 =
     let (^&&) a b = nand a b
     let (|->) a b = impl a b
 
-    let tablen n expr =
-        let replicate n xs =
-            let rec repl acc n =
-                match n with 
-                | 0 -> acc
-                | n-> 
-                    let acc' = acc |> List.collect(fun ys -> xs |> List.map(fun x -> x::ys))
-                    repl acc' (n-1)
-            repl [[]] n
-        let values = replicate n [true; false]
+    let replicate n xs =
+        let rec repl acc n =
+            match n with 
+            | 0 -> acc
+            | n-> 
+                let acc' = acc |> List.collect(fun ys -> xs |> List.map(fun x -> x::ys))
+                repl acc' (n-1)
+        repl [[]] n
+
+
+    let tablengen n expr generator =
+        let values = generator n 
         let toString bs = System.String.Join(" ",Array.ofList(bs |> List.map string))
         values |> Seq.iter(fun bs-> printf "%s %b\n" (bs |> toString) (expr bs))
+
+    let tablen n expr =
+        tablengen n expr (fun n -> replicate n [true; false])
 
     tablen 3 (fun [a;b;c] -> a && b || (a=c))
