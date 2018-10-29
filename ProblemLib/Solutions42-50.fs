@@ -1,10 +1,6 @@
 ﻿namespace Problems_solutions
 
-open System.Net.Sockets
-
 module Solutions42 =
-    open System.Net.Sockets
-
     let and' = (&&)
     let or' = (||)
     let nand a b = not <| and' a b
