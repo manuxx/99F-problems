@@ -1,48 +1,48 @@
 namespace Problems_solutions
 
 module Solutions=
-    let rec LastListElement1 (list:List<'T>) : Option<'T>=
+    let rec LastListElement1 (list:'a list) : 'a option=
         match list with
         | [] -> None
         | [ last ] -> Some last
         | _ :: tail -> LastListElement1 tail
 
-    let LastListElement2 (list:List<'T>) : 'T   =
+    let LastListElement2 (list:'a list) : 'a   =
         list 
         |> List.rev 
         |> List.head
    
-    let LastListElement3 (list:List<'T>) : 'T   =
+    let LastListElement3 (list:'a list) : 'a   =
         list 
         |> List.reduce (fun (_) (y) -> y)
 
-    let rec ButLastListElement1 (list:List<'T>) : Option<'T>=
+    let rec ButLastListElement1 (list:'a list) : 'a option=
         match list with
         | [] -> None
         | [ _ ] -> None
         | gotIt :: [ _ ] -> Some gotIt
         | _ :: tail -> ButLastListElement1 tail
 
-    let rec ButLastListElement2a (list:List<'T>) : 'T =
+    let rec ButLastListElement2a (list:'a list) : 'a =
         list 
         |> List.rev 
         |> List.skip 1
         |> List.head
 
-    let rec ButLastListElement2b (list:List<'T>) : 'T =
+    let rec ButLastListElement2b (list:'a list) : 'a =
         list 
         |> List.rev 
         |> List.tail
         |> List.head
 
-    let rec ButLastListElement3 (list:List<'T>) : 'T =
+    let rec ButLastListElement3 (list:'a list) : 'a =
         let fliparg f a b = f b a
         list |> List.rev |> fliparg List.nth 1 
         
-    let rec ButLastListElement4 (list:List<'T>) : 'T =
+    let rec ButLastListElement4 (list:'a list) : 'a =
         list |> List.rev |> List.item 1 
     
-    let rec KthListElement1 (list:List<'T>) (k:int): Option<'T> = 
+    let rec KthListElement1 (list:'a list) (k:int): 'a option = 
         match list with
         | [] -> None
         | head :: tail -> 
@@ -51,80 +51,80 @@ module Solutions=
             else 
                 KthListElement1 tail (k-1)
         
-    let KthListElement2 (list:List<'T>) (k:int) : 'T = 
+    let KthListElement2 (list:'a list) (k:int) : 'a = 
         list |> List.skip (k-1) |> List.head    
         
-    let KthListElement3 (list:List<'T>) (k:int) : 'T = 
+    let KthListElement3 (list:'a list) (k:int) : 'a = 
         //List.item k
         list |> List.item (k-1)
 
-    let rec ListLenght1 (list:List<'T>) : int =
+    let rec ListLenght1 (list:'a list) : int =
         match list with
         | [] -> 0
         | _ :: tail -> 1+ ListLenght1 tail
     
-    let ListLenght2 (list:List<'T>) : int =
-        let rec LLen (list:List<'T>) (acc:int) : int =
+    let ListLenght2 (list:'a list) : int =
+        let rec LLen (list:'a list) (acc:int) : int =
             match list with
             | [] -> acc
             | _ :: tail -> LLen tail (acc+1)
         LLen list 0
     
-    let ListLenght2a (list:List<'T>) : int =
-        let rec LLen (list:List<'T>) fa : int =
+    let ListLenght2a (list:'a list) : int =
+        let rec LLen (list:'a list) fa : int =
             match list with
             | [] -> fa()
             | _ :: tail -> LLen tail (fun () -> fa() + 1)
         LLen list (fun ()-> 0)
     
-    let ListLenght3 (list:List<'T>) : int =
+    let ListLenght3 (list:'a list) : int =
         list.Length
     
-    let ListLenght4 (list:List<'T>) : int =
+    let ListLenght4 (list:'a list) : int =
         list |> List.sumBy (fun x -> 1)
 
-    let ListLenght5 (list:List<'T>) : int =
+    let ListLenght5 (list:'a list) : int =
         list |> List.fold (fun cnt x -> cnt+1) 0
 
-    let ListRev1 (list:List<'T>) : List<'T> =
+    let ListRev1 (list:'a list) : 'a list =
         list |> List.rev
 
     let ListRev2 (list:'a list) : 'a list =
-        let rec LRev (input:List<'T>) (accum:List<'T>) : List<'T> =
+        let rec LRev (input:'a list) (accum:'a list) : 'a list =
             match input with
             | [] -> accum
             | head :: tail -> LRev tail (head::accum)
         LRev list []
 
     let ListRev2a (list:'a list) : 'a list =
-        let rec LRev (input:List<'T>) fa : List<'T> =
+        let rec LRev (input:'a list) fa : 'a list =
             match input with
             | [] -> fa()
             | head :: tail -> LRev tail (fun ()-> head::fa())
         LRev list (fun ()->[])
 
-    let rec ListRev3 (list:List<'T>) : List<'T> =
+    let rec ListRev3 (list:'a list) : 'a list =
         let rec rev acc = function //Pattern matching function
         | [] -> acc
         | x :: xs -> rev (x::acc) xs
         rev [] list
     
-    let rec ListRev3a (list:List<'T>) : List<'T> =
+    let rec ListRev3a (list:'a list) : 'a list =
         let rec rev acc = fun xxx -> 
             match xxx with
             | [] -> acc
             | x :: xs -> rev (x::acc) xs
         rev [] list
 
-    let rec ListRev4 (xs:List<'T>) : List<'T>  =
-        List.fold(fun (acc:List<'T>) (x:'T) -> x::acc) [] xs
+    let rec ListRev4 (xs:'a list) : 'a list  =
+        List.fold(fun (acc:'a list) (x:'a) -> x::acc) [] xs
     
-    let rec IsListPalindrome (list:List<'T>):bool  =
+    let rec IsListPalindrome (list:'a list):bool  =
         list = List.rev list
     
     type 'a NestedList = List of 'a NestedList list | Elem of 'a
 
-    let rec FlattenList1 (input:NestedList<'T>):list<'T>  =
+    let rec FlattenList1 (input:'a NestedList):'a list  =
         match input with
         | Elem e -> [e]
         | List [] -> []
@@ -133,21 +133,21 @@ module Solutions=
             | Elem e -> e:: (FlattenList1 (List tail))
             | List list -> List.append (FlattenList1 (List list)) (FlattenList1 (List tail))
 
-    let rec FlattenList2 (input:NestedList<'T>):list<'T>  =
+    let rec FlattenList2 (input:'a NestedList):'a list  =
         match input with
         | Elem e -> [e]
         // List list -> List.collect (fun e-> FlattenList2b e) list
         | List list -> 
             list |> List.map (fun e -> FlattenList2 e) |> List.collect (fun l->l)
     
-    let FlattenList2b (input:NestedList<'T>):list<'T>  =
+    let FlattenList2b (input:'a NestedList):'a list  =
         let rec loop = 
             List.collect(function
                         | Elem e -> [e]
                         | List xs -> loop xs) // with warning
         loop [input]
     
-    let rec FlattenList3 (input:NestedList<'T>):list<'T>  =
+    let rec FlattenList3 (input:'a NestedList):'a list  =
         match input with
         | Elem e -> [e]
         | List list -> 
@@ -156,7 +156,7 @@ module Solutions=
             //|> List.fold (fun l1 l2 -> List.append l1 l2) [] 
             List.fold (fun accum e2 -> List.append accum (FlattenList3 e2)) [] list
     
-    let rec FlattenList3b (input:NestedList<'T>):list<'T>  =
+    let rec FlattenList3b (input:'a NestedList):'a list  =
         let rec loop acc = function
                             | Elem x -> x::acc
                             | List xs -> 
