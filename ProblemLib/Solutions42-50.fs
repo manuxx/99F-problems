@@ -76,4 +76,81 @@ module Solutions42 =
     let tablen n expr =
         tablengen n expr (fun n -> replicate n [true; false])
 
-    tablen 3 (fun [a;b;c] -> a && b || (a=c))
+    let genGrayCode digits =
+        genBoolGrayTable digits
+        |> List.map (fun l -> l |> List.map (fun b-> if b then "1" else "0") |> List.fold (+) "" )
+    
+    let rec genGrayCodeRec digits =
+        if digits<=0 then [];
+        else if digits=1 then ["0";"1"]
+        else
+            let ret = genGrayCodeRec (digits-1)
+            [for s in ret do yield "0" + s]
+            @
+            [for s in List.rev ret do yield "1"+s]
+        
+    let rec genGrayCodeRecAlt digits =
+        if digits<=0 then [];
+        else if digits=1 then ["0";"1"]
+        else
+            let stepPrev = genGrayCodeRec (digits-1)
+            (stepPrev |> List.map ((+) "0") ) @ (stepPrev |> List.rev |> List.map ((+) "1") )
+            
+    
+    let rec genHuffman inputChars =
+        let rec buildCode huffmanTreeNodes =
+            match huffmanTreeNodes |>  List.sortBy (fun (chars, cnt) -> cnt) with
+            | [] -> []
+            | [ (chars, len) ] ->  chars
+            | (chars1, len1) :: (chars2, len2) :: tail ->  
+                let allChars = (chars1 |> List.map (fun (char,code) -> (char,"0"+code))) 
+                                @ (chars2 |> List.map (fun (char,code) -> (char,"1"+code)) )
+                
+                buildCode ( (allChars, len1+len2) :: tail )
+                
+        inputChars 
+        |> List.map (fun (char,cnt) -> [(char,"")], cnt)
+        |> buildCode
+        |> List.sortBy (fun (char,_ ) -> char)
+        
+
+        //|> reduce
+
+    // First we create a representation of the Huffman tree
+    type 'a HuffmanTree = Node of int (*frecuency*) * 'a (* left *) HuffmanTree * 'a (* right *) HuffmanTree | Leaf of int * 'a (* term *)
+    
+    // Auxiliary function to get the frecuency
+    let frecuency = function
+        | Leaf (frec, _) -> frec
+        | Node(frec, _, _) -> frec
+
+    // Once we have build the Huffman tree, we can use this function to assing the codes
+    // nodes to the left get a '0'. Nodes to the right get a '1'.
+    let encode tree =
+        let rec enc code tree cont =
+            match tree with
+                | Leaf (_, a) -> cont [(a, code)]
+                | Node(_, lt, rt) ->
+                    enc (code + "0") lt <| fun ltacc -> enc (code + "1") rt <| fun rtacc -> cont (ltacc @ rtacc)
+        enc "" tree id
+    // The algorithm is explained here: http://en.wikipedia.org/wiki/Huffman_coding
+    // The implementation below uses lists. For better performance use a priority queue.
+    // This is how it works. First we transform the list of terms and frecuencies into a list of Leafs (6).
+    // Then, before anything happpens, we sort the list to place the terms with the lowest frecuency
+    // at the head of the List (1) (this is where a priority queue would shine). 
+    // Otherwise, we combine the first two elements into a Node with the combined frecuency of the two nodes (4). 
+    // We add the node to the list and try again (5). Eventualy the list is reduced to 
+    // one term and we're done constructing the tree (2). Once we have the tree, we just need to encode it (7).
+    let huffman symbols =
+        let rec createTree tree = 
+            let xs = tree |> List.sortBy frecuency (* 1 *)
+            match xs with
+                | [] -> failwith "Empty list"
+                | [x] -> x (* 2 *)
+                | x::y::xs -> (* 3 *)
+                    let ht = Node(frecuency x + frecuency y, x , y) (* 4 *)
+                    createTree (ht::xs) (* 5 *)
+        let ht = symbols 
+                    |> List.map(fun (a,f) -> Leaf (f,a)) (* 6 *)
+                    |> createTree
+        encode ht |> List.sortBy(fst) (* 7 *)

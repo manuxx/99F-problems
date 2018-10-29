@@ -74,3 +74,5 @@ module Tests31 =
         Solutions31.goldbachList 10 20 
         |> List.ofSeq |> should equal [ Some (3,7); Some (5,7); Some (3,11); Some (3,13); Some (5,13); Some (3,17) ]
         Solutions31.goldbachList' 4 2000 50 |> should equal [Some(73, 919); Some(61, 1321); Some(67, 1789); Some(61, 1867)]
+
+    

@@ -70,6 +70,13 @@ module Solutions=
             | _ :: tail -> LLen tail (acc+1)
         LLen list 0
     
+    let ListLenght2a (list:List<'T>) : int =
+        let rec LLen (list:List<'T>) fa : int =
+            match list with
+            | [] -> fa()
+            | _ :: tail -> LLen tail (fun () -> fa() + 1)
+        LLen list (fun ()-> 0)
+    
     let ListLenght3 (list:List<'T>) : int =
         list.Length
     
@@ -88,6 +95,13 @@ module Solutions=
             | [] -> accum
             | head :: tail -> LRev tail (head::accum)
         LRev list []
+
+    let ListRev2a (list:'a list) : 'a list =
+        let rec LRev (input:List<'T>) fa : List<'T> =
+            match input with
+            | [] -> fa()
+            | head :: tail -> LRev tail (fun ()-> head::fa())
+        LRev list (fun ()->[])
 
     let rec ListRev3 (list:List<'T>) : List<'T> =
         let rec rev acc = function //Pattern matching function
@@ -149,7 +163,6 @@ module Solutions=
                                 List.foldBack (fun x acc -> loop acc x) xs acc
         loop [] input
     
-
     let rec RemoveConsecutiveDuplicates1 (input:'a list) : 'a list =
         let rec workerFun accum input = 
             match input with
@@ -158,6 +171,15 @@ module Solutions=
             | e1::(e2::_  as tail1) when e1=e2 -> workerFun accum tail1
             | e::tail -> workerFun (e::accum) tail 
         List.rev (workerFun [] input)
+
+    let rec RemoveConsecutiveDuplicates1a (input:'a list) : 'a list =
+        let rec workerFun af input = 
+            match input with
+            | [] -> af()
+            | x :: [] -> x::af()
+            | e1::(e2::_  as tail1) when e1=e2 -> workerFun af tail1
+            | e::tail -> workerFun (fun () -> e::af() ) tail 
+        List.rev (workerFun (fun ()->[]) input)
 
     let rec RemoveConsecutiveDuplicates2 (input:'a list) : 'a list =
         match input with

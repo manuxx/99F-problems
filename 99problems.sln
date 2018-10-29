@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ProblemLib", "ProblemLib\ProblemLib.fsproj", "{57242E55-9A21-45A6-B73A-17922C5FA512}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ProblemTests", "ProblemTests\ProblemTests.fsproj", "{50F4B5E9-4C55-4216-9C2B-0CABE1E1C7D0}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ProblemTests", "ProblemTests\ProblemTests.fsproj", "{50F4B5E9-4C55-4216-9C2B-0CABE1E1C7D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

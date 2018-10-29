@@ -10,6 +10,7 @@
     <Compile Include="Tests21-30.fs" />
     <Compile Include="Tests31-41.fs" />
     <Compile Include="Tests42-50.fs" />
+    <Compile Include="Tests51-61.fs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -78,8 +78,12 @@ module Tests =
         checkListLengthCases Solutions.ListLenght1
 
     [<Fact>]
-    let ``Solution 4 rec accum`` () =
+    let ``Solution 4 rec acc`` () =
         checkListLengthCases Solutions.ListLenght2 
+    
+    [<Fact>]
+    let ``Solution 4 rec acc func pattern`` () =
+        checkListLengthCases Solutions.ListLenght2a 
 
     [<Fact>]
     let ``Solution 4 len`` () =
@@ -109,7 +113,12 @@ module Tests =
         checkListReverseCases Solutions.ListRev2 
     
     [<Fact>]
-    let ``Solution 5 rec acc function`` () =
+    let ``Solution 5 rec acc func pattern`` () =
+        checkListReverseCases Solutions.ListRev2a 
+    
+
+    [<Fact>]
+    let ``Solution 5 rec function`` () =
         checkListReverseCases Solutions.ListRev3 
 
     [<Fact>]
@@ -169,10 +178,14 @@ module Tests =
         let expected = [1;2;3;2;3;2;5]
         let result = fun4test input
         result |> should equal expected
+        
+    [<Fact>]
+    let ``Solution 8 recursive acc`` () =
+        checkRemoveConsecutivesCases Solutions.RemoveConsecutiveDuplicates1 
 
     [<Fact>]
-    let ``Solution 8 recursive`` () =
-        checkRemoveConsecutivesCases Solutions.RemoveConsecutiveDuplicates1 
+    let ``Solution 8 recursive acc func pattern`` () =
+        checkRemoveConsecutivesCases Solutions.RemoveConsecutiveDuplicates1a
     
     [<Fact>]
     let ``Solution 8 fold`` () =
