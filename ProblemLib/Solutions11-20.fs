@@ -4,7 +4,7 @@ module Solutions11=
     type 'a EncodingRLE = 
     | Single of 'a
     | Multiple of int * 'a
-    
+
     let RunLenghtEncodingMod (input:'a list) : 'a EncodingRLE list =
         input
         |> Solutions.PackConsecutiveDuplicates1
