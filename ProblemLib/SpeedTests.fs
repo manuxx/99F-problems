@@ -20,6 +20,7 @@ module SolutionsSpeedTests=
     let rec GenComb3 input n =
         match input, n with
             | _, 0  -> [[]]
+            | [], _  -> [[]]    // because of warning
             | input, n when n >= List.length input -> [input]
             | x::xs, _ -> [
                             for x' in GenComb3 xs (n-1) do yield x::x'; 
@@ -29,6 +30,7 @@ module SolutionsSpeedTests=
     let rec GenComb4 input n =
         match input, n with
             | _, 0  -> [[]]
+            | [], _  -> [[]]    // because of warning
             | input, n when n >= List.length input -> [input]
             | x::xs, _ -> [
                             for x' in GenComb4 xs (n-1) do yield x::x'; 
@@ -90,3 +92,28 @@ Real: 00:00:14.629, CPU: 00:00:16.640, GC gen0: 296, gen1: 130, gen2: 10
 val x : int = 1352078
 
 *)
+    open Solutions51
+
+    let list1 = [20;1;3;6;8;9;5;4;2;31;29;26;24;23;27;28;30]
+    let doublesymTreeNodes list = 
+        let max1 = List.max list
+        ((max1+1) :: list) @ (List.map (fun x -> 2*max1 + 2 - x) list)
+    
+    let applyFunNTimes f n x = 
+        [1..n] |> List.fold (fun l i -> f l ) x 
+
+    let nodes = applyFunNTimes doublesymTreeNodes 15 list1
+        
+    nodes |> construct |> ignore
+    nodes |> construct' |> ignore
+    nodes |> construct'' |> ignore
+
+    let tree = nodes |> construct 
+    printf "isSymTreeIP %b" (isSymTreeIP tree)
+    printf "isSymTreeAlt %b" (isSymTreeAlt tree)
+
+
+    (*
+        czasy:
+        construct < construct'' < construct'
+    *)

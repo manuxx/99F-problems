@@ -92,7 +92,7 @@ module Tests21 =
     
     [<Fact>]
     let ``Solution 26 rec`` () =
-        checkCombinationCases Solutions21.GenCombinations 
+        checkCombinationCases Solutions21.GenCombinationsNoRepetitions 
 
     [<Fact>]
     let ``Solution 26 yield`` () =
@@ -146,7 +146,7 @@ module Tests21 =
 
     [<Fact>]
     let ``Solution 27 not diff - alt version`` () =
-        checkGenDisjointSetsCases Solutions21.GenDisjointSetsNoDiff1
+        checkGenDisjointSetsCases Solutions21.GenDisjointSetsNoDiffYield
 
     [<Fact>]
     let ``Solution 28a`` () =

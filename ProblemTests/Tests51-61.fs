@@ -8,20 +8,35 @@ open Solutions51
 module Tests51 =
     type 'a Tree =  'a Solutions51.Tree
     
-    [<Fact(Skip="not implemented yet")>]
+    let checkIsBalancedTeeListCorrect fun4Test = 
+        let checkSingleSize n expectedCnt =
+            let result = fun4Test n
+            List.length result |> should equal expectedCnt
+            result |> should be unique 
+            List.forall isBalanced result |> should be True
+
+        checkSingleSize 6 4
+        checkSingleSize 15 1
+        checkSingleSize 18 256
+
+    [<Fact>]
     let ``Solution 55`` () =
-        0 |> should equal 0
+        checkIsBalancedTeeListCorrect genBalTrees 
+    
+    [<Fact>]
+    let ``Solution 55 yield`` () =
+        checkIsBalancedTeeListCorrect genBalTreesYield 
     
     let checkIsSymTree fun4Test =
         let exampleNSym = Branch('x',
-                        Branch('y',
-                            Branch('z',
-                                Empty,
-                                Branch('k',Empty,Empty)
+                            Branch('y',
+                                Branch('z',
+                                    Empty,
+                                    Branch('k',Empty,Empty)
+                                ),
+                                Empty
                             ),
-                            Empty
-                        ),
-                        Branch('c',Empty,Empty)
+                            Branch('c',Empty,Empty)
         )
         let exampleSym =   Branch('x',
                                     Branch('y',
@@ -91,3 +106,13 @@ module Tests51 =
                                                         Branch (8,Empty,
                                                                   Branch (9,Empty,Empty)))))
         [1;3;6;8;9;5;4;2] |> construct |> should equal expectedTree
+    
+    [<Fact>]
+    let ``Solution 57 cont`` () =
+        let expectedTree = Branch(1,Empty, 
+                                    Branch(3,Branch (2, Empty, Empty),
+                                             Branch (6, Branch (5, Branch (4, Empty, Empty),
+                                                                   Empty),
+                                                        Branch (8,Empty,
+                                                                  Branch (9,Empty,Empty)))))
+        [1;3;6;8;9;5;4;2] |> construct' |> should equal expectedTree

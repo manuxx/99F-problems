@@ -210,8 +210,9 @@ module Solutions=
                         | [] -> [[x]]
                         | curGroup :: previousGroups -> 
                             match curGroup with
+                            | [] -> [] // because of warning    
                             | curElem :: _ when curElem=x -> (x::curGroup) :: previousGroups
-                            | curElem :: _ -> [x] :: curGroup :: previousGroups
+                            | _ :: _ -> [x] :: curGroup :: previousGroups
                        ) input []
 
     let PackConsecutiveDuplicates1a (input:'a list) : 'a list list =

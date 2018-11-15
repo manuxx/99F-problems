@@ -51,7 +51,7 @@ module Solutions21=
         NTimePickRandom input (List.length input)
         |> List.ofSeq
 
-    let GenCombinations input n   =
+    let GenCombinationsNoRepetitions input n   =
         let rec genWork curSubSel remainingElements k =
             match remainingElements,k with 
                 |_, 0 -> [List.rev curSubSel]
@@ -94,11 +94,11 @@ module Solutions21=
         match subsetCounts with
         | [] -> []
         | [c] -> [
-                    for ret in GenCombinations input c do
+                    for ret in GenCombinationsNoRepetitions input c do
                         yield [ret]
                  ]
         | c::cs -> [
-                    for group in GenCombinations input c do
+                    for group in GenCombinationsNoRepetitions input c do
                         let unused = difference input group
                         for rest in GenDisjointSets cs unused do
                             yield group::rest
@@ -128,7 +128,7 @@ module Solutions21=
                             yield group::rest
                   ]
 
-    let rec GenDisjointSetsNoDiff1 ns xs : 'a list list list =
+    let rec GenDisjointSetsNoDiffYield ns xs : 'a list list list =
         let rec combinations xs n =
             match xs, n with
                 |xs, 0 -> [([],xs)]
@@ -141,7 +141,7 @@ module Solutions21=
         | [], _ -> [[]]
         | n::ns,xs -> [
                         for g,rs in combinations xs n do
-                            for gs in GenDisjointSetsNoDiff1 ns rs do 
+                            for gs in GenDisjointSetsNoDiffYield ns rs do 
                                 yield g::gs
                     ]
 
