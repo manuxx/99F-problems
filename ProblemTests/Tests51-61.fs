@@ -116,3 +116,19 @@ module Tests51 =
                                                         Branch (8,Empty,
                                                                   Branch (9,Empty,Empty)))))
         [1;3;6;8;9;5;4;2] |> construct' |> should equal expectedTree
+
+    [<Fact>]
+    let ``Solution 58`` () =
+        let trees = genSymBalTrees 5
+        List.length trees |> should equal 2
+        trees 
+        |> List.forall isBalanced 
+        |> should be True
+
+    [<Fact>]
+    let ``Solution 59`` () =
+        let trees = genHBalTrees 3
+        List.length trees |> should equal 15
+        trees 
+        |> List.forall isHBalanced 
+        |> should be True

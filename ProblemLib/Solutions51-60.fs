@@ -19,12 +19,12 @@ module Solutions51 =
         | Balanced _ -> true
         | Unbalanced -> false
 
+    let genAllPairs l1 l2 =
+        l1
+        |> (List.map (fun e1 -> l2 |> List.map (fun e2 -> (e1,e2))) )
+        |> List.collect id
+    
     let rec genBalTrees n =
-        let genAllPairs l1 l2 =
-            l1
-            |> (List.map (fun e1 -> l2 |> List.map (fun e2 -> (e1,e2))) )
-            |> List.collect id
-
         if n=0 then 
             [Empty]
         elif n=1 then
@@ -137,22 +137,27 @@ module Solutions51 =
     let construct' xs = xs |> List.fold (fun tree x -> insertBSTAlt x tree) Empty
     let construct'' xs = xs |> List.fold (fun tree x -> insertBSTAlt' x tree) Empty
 
-    (*
-    let list1 = [20;1;3;6;8;9;5;4;2;31;29;26;24;23;27;28;30]
-    let doublesymTreeNodes list = 
-        let max1 = List.max list
-        ((max1+1) :: list) @ (List.map (fun x -> 2*max1 + 2 - x) list)
-    
-    let applyFunNTimes f n x = 
-        [1..n] |> List.fold (fun l i -> f l ) x 
+    let genSymBalTrees = genBalTrees >> List.filter isSymTreeIP
 
-    let nodes = applyFunNTimes doublesymTreeNodes 15 list1
-        
-    nodes |> construct |> ignore
-    nodes |> construct' |> ignore
-    nodes |> construct'' |> ignore
+    let rec genHBalTrees n = 
+        match n with 
+        | 0 -> [Empty]
+        | 1 -> [Branch('x', Empty, Empty)]
+        | n -> let ts1 = genHBalTrees (n-1)
+               let ts2 = genHBalTrees (n-2)
+               genAllPairs ts1 ts2 @ genAllPairs ts2 ts1 @ genAllPairs ts1 ts1 
+               |> List.map (fun (t1, t2) -> Branch('x',t1,t2) )
 
-    let tree = nodes |> construct 
-    printf "isSymTreeIP %b" (isSymTreeIP tree)
-    printf "isSymTreeAlt %b" (isSymTreeAlt tree)
-    *)
+    let rec isHBalanced t = 
+        let rec calcHBalance tree =
+            match tree with
+            | Empty -> Balanced 0
+            | Branch (_, t1, t2) -> 
+                match (calcHBalance t1, calcHBalance t2) with
+                | (Unbalanced, _) -> Unbalanced
+                | (_, Unbalanced) -> Unbalanced
+                | (Balanced n1, Balanced n2) when abs(n1-n2)<=1 -> Balanced (max n1 n2)
+                |  _ -> Unbalanced 
+        match (calcHBalance t) with
+        | Balanced _ -> true
+        | Unbalanced -> false
